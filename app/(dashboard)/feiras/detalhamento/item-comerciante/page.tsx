@@ -22,7 +22,6 @@ import {
 
 /* ══════════════════════════════════════════════════════════
    TIPOS
-   - Ajuste os campos conforme o EstoqueBancaDTO do backend
    ══════════════════════════════════════════════════════════ */
 interface ComercianteDeItem {
   id: string;
@@ -38,112 +37,42 @@ interface ItemAgrupado {
 }
 
 /* ══════════════════════════════════════════════════════════
-   MOCK — substitua por chamada real ao backend
-   Endpoint esperado: GET /api/feiras/{feiraId}/estoques
-   ou: GET /api/estoque-banca?feiraId={feiraId}
-   Retorno esperado: lista de itens com seus comerciantes
-   ══════════════════════════════════════════════════════════ */
-const MOCK_ITENS: ItemAgrupado[] = [
-  {
-    id: "mock-item-1",
-    nome: "Tomate",
-    comerciantes: [
-      { id: "c1", nome: "João Silva", quantidade: 5, valorUnitario: 3.5 },
-      { id: "c2", nome: "Maria Santos", quantidade: 3, valorUnitario: 3.8 },
-      { id: "c3", nome: "Pedro Alves", quantidade: 8, valorUnitario: 3.2 },
-    ],
-  },
-  {
-    id: "mock-item-2",
-    nome: "Alface",
-    comerciantes: [
-      { id: "c1", nome: "João Silva", quantidade: 10, valorUnitario: 2.0 },
-      { id: "c4", nome: "Ana Costa", quantidade: 6, valorUnitario: 2.2 },
-      { id: "c5", nome: "Marcos Lima", quantidade: 4, valorUnitario: 1.8 },
-      { id: "c6", nome: "Fernanda Souza", quantidade: 8, valorUnitario: 2.0 },
-    ],
-  },
-  {
-    id: "mock-item-3",
-    nome: "Cenoura",
-    comerciantes: [
-      { id: "c1", nome: "João Silva", quantidade: 4, valorUnitario: 2.8 },
-      { id: "c7", nome: "Carlos Ferreira", quantidade: 7, valorUnitario: 2.5 },
-    ],
-  },
-  {
-    id: "mock-item-4",
-    nome: "Batata",
-    comerciantes: [
-      { id: "c1", nome: "João Silva", quantidade: 8, valorUnitario: 4.0 },
-      { id: "c8", nome: "Lucia Rodrigues", quantidade: 5, valorUnitario: 4.2 },
-      { id: "c3", nome: "Pedro Alves", quantidade: 12, valorUnitario: 3.8 },
-    ],
-  },
-  {
-    id: "mock-item-5",
-    nome: "Pimentão",
-    comerciantes: [
-      { id: "c2", nome: "Maria Santos", quantidade: 6, valorUnitario: 5.0 },
-      { id: "c4", nome: "Ana Costa", quantidade: 4, valorUnitario: 5.5 },
-    ],
-  },
-  {
-    id: "mock-item-6",
-    nome: "Couve",
-    comerciantes: [
-      { id: "c2", nome: "Maria Santos", quantidade: 12, valorUnitario: 1.8 },
-      { id: "c5", nome: "Marcos Lima", quantidade: 8, valorUnitario: 1.6 },
-      { id: "c6", nome: "Fernanda Souza", quantidade: 6, valorUnitario: 2.0 },
-      { id: "c7", nome: "Carlos Ferreira", quantidade: 10, valorUnitario: 1.7 },
-    ],
-  },
-  {
-    id: "mock-item-7",
-    nome: "Cebola",
-    comerciantes: [
-      { id: "c4", nome: "Ana Costa", quantidade: 10, valorUnitario: 2.5 },
-      { id: "c8", nome: "Lucia Rodrigues", quantidade: 8, valorUnitario: 2.8 },
-    ],
-  },
-];
-
-/* ══════════════════════════════════════════════════════════
-   FUNÇÃO DE BUSCA — conecte ao backend aqui
-   Parâmetros disponíveis: token (JWT), feiraId
+   FUNÇÃO DE BUSCA REAL (CONECTADA AO BACKEND)
    ══════════════════════════════════════════════════════════ */
 async function fetchItensComComerciantes(
   token: string,
   feiraId: string
 ): Promise<ItemAgrupado[]> {
-  // TODO: substituir pelo fetch real
-  // Exemplo de como deve ficar após integração:
-  //
-  // const response = await fetch(
-  //   `${process.env.NEXT_PUBLIC_API_URL}/api/estoque-banca?feiraId=${feiraId}`,
-  //   { headers: { Authorization: `Bearer ${token}` } }
-  // );
-  // if (!response.ok) throw new Error("Erro ao buscar estoques");
-  // const data = await response.json();
-  //
-  // Agrupar por item:
-  // const map = new Map<string, ItemAgrupado>();
-  // for (const estoque of data) {
-  //   if (!map.has(estoque.itemId)) {
-  //     map.set(estoque.itemId, { id: estoque.itemId, nome: estoque.itemNome, comerciantes: [] });
-  //   }
-  //   map.get(estoque.itemId)!.comerciantes.push({
-  //     id: estoque.comercianteId,
-  //     nome: estoque.comercianteNome,
-  //     quantidade: estoque.quantidadeDisponivel,
-  //     valorUnitario: estoque.precoBase,
-  //   });
-  // }
-  // return Array.from(map.values());
-
-  // Mock temporário
-  await new Promise((res) => setTimeout(res, 400));
-  return MOCK_ITENS;
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/estoque-banca?feiraId=${feiraId}`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  
+  if (!response.ok) {
+    throw new Error("Erro ao buscar estoques");
+  }
+  
+  const data = await response.json();
+  
+  // Agrupar os dados retornados por item
+  const map = new Map<string, ItemAgrupado>();
+  for (const estoque of data) {
+    if (!map.has(estoque.itemId)) {
+      map.set(estoque.itemId, { 
+        id: estoque.itemId, 
+        nome: estoque.itemNome, 
+        comerciantes: [] 
+      });
+    }
+    map.get(estoque.itemId)!.comerciantes.push({
+      id: estoque.comercianteId,
+      nome: estoque.comercianteNome,
+      quantidade: estoque.quantidadeDisponivel,
+      valorUnitario: estoque.precoBase,
+    });
+  }
+  
+  return Array.from(map.values());
 }
 
 /* ── Helpers ─────────────────────────────────────────────── */
@@ -171,12 +100,14 @@ function ItemDropdown({
     function handler(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) {
         setOpen(false);
-        setSearch("");
+        if (search) {
+          setSearch("");
+        }
       }
     }
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
-  }, []);
+  }, [search]);
 
   const filtered = itens.filter((it) =>
     it.nome.toLowerCase().includes(search.toLowerCase())
@@ -444,30 +375,48 @@ export default function ItemComerciantePage() {
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState<string | null>(null);
 
- useEffect(() => {
-  let isMounted = true;
+  useEffect(() => {
+    let isMounted = true;
 
-  if (!token || !feiraId) {
-    if (isMounted) {
-      setItens(MOCK_ITENS);
-      setLoading(false);
+    if (!token || !feiraId) {
+      setTimeout(() => {
+        if (isMounted) {
+          setErro("Token ou identificador da feira não encontrados.");
+          setItens([]);
+          setLoading(false);
+        }
+      }, 0);
+      return;
     }
-    return;
-  }
 
-  async function fetchItensComComerciantes(
-  _token: string,  // Prefixed with _ to indicate intentionally unused
-  _feiraId: string
-): Promise<ItemAgrupado[]> {
-  // Mock temporário
-  await new Promise((res) => setTimeout(res, 400));
-  return MOCK_ITENS;
-}
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchItensComComerciantes(token, feiraId);
+        
+        if (isMounted) {
+          setItens(data);
+          setErro(null);
+        }
+      } catch (error) {
+        if (isMounted) {
+          setErro("Erro ao carregar os dados da feira.");
+          setItens([]);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
 
-  return () => {
-    isMounted = false;
-  };
-}, [token, feiraId]);
+    loadData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [token, feiraId]);
+
   function handleLogout() { logout(); router.push("/login"); }
 
   return (

@@ -403,7 +403,7 @@ export default function ItemComerciantePage() {
           setItens(data);
           setErro(null);
         }
-      } catch (error) {
+      } catch {
         if (isMounted) {
           setErro("Erro ao carregar os dados. Verifique sua conexão e tente novamente.");
           setItens([]);
