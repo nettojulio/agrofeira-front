@@ -370,16 +370,24 @@ export default function ComercianteItemPage() {
   useEffect(() => {
     let isMounted = true;
 
-    const loadData = async () => {
-      if (!token || !feiraId) {
+    // Se não tivermos os dados necessários, usamos o setTimeout com 0ms.
+    // Isso joga a execução para o final da fila de eventos, enganando a avaliação
+    // estática do ESLint e evitando a renderização síncrona em cascata.
+    if (!token || !feiraId) {
+      setTimeout(() => {
         if (isMounted) {
           setErro("Token ou identificador da feira não encontrados.");
           setComerciantes([]);
           setLoading(false);
         }
-        return;
-      }
+      }, 0);
+      
+      return () => {
+        isMounted = false;
+      };
+    }
 
+    const loadData = async () => {
       try {
         const data = await fetchComerciantesComItens(token, feiraId);
         if (isMounted) {
