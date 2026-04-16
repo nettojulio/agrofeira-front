@@ -2,7 +2,6 @@
 
 import { useState, type ElementType } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
 import {
   Store,
   UserPlus,
@@ -14,8 +13,6 @@ import {
   UserCog,
   PackageOpen,
   Wallet,
-  LogOut,
-  Leaf,
   ChevronRight,
 } from "lucide-react";
 
@@ -43,7 +40,7 @@ const registerCards: CardItem[] = [
     icon: UserPlus,
     description: "Registre novos comerciantes",
     accent: "#1b6112",
-    href: "/comerciantes/novo",
+    href: "/comerciantes/cadastrar",
   },
   {
     label: "Cadastrar",
@@ -51,7 +48,7 @@ const registerCards: CardItem[] = [
     icon: Users,
     description: "Cadastre clientes na plataforma",
     accent: "#2d7a1f",
-    href: "/clientes/novo",
+    href: "/clientes/cadastrar",
   },
   {
     label: "Cadastrar",
@@ -205,178 +202,60 @@ function ActionCard({ card, index }: { card: CardItem; index: number }) {
   );
 }
 
-function SectionHeader({
-  icon: Icon,
-  title,
-  subtitle,
-  gradient,
-}: {
-  icon: ElementType;
-  title: string;
-  subtitle: string;
-  gradient: string;
-}) {
-  return (
-    <div className="flex items-center gap-3 mb-4">
-      <div
-        className="flex items-center justify-center w-8 h-8 rounded-lg shrink-0"
-        style={{ background: gradient }}
-      >
-        <Icon size={15} className="text-white" />
-      </div>
-      <div>
-        <h2
-          className="text-[#1a3d1f] leading-tight"
-          style={{
-            fontWeight: 700,
-            fontSize: "1.05rem",
-            letterSpacing: "-0.01em",
-          }}
-        >
-          {title}
-        </h2>
-        <p className="text-[#8aaa8d] text-xs">{subtitle}</p>
-      </div>
-      <div
-        className="flex-1 h-px ml-2"
-        style={{
-          background: "linear-gradient(to right, #c8deca, transparent)",
-        }}
-      />
-    </div>
-  );
-}
-
 export default function DashboardPage() {
-  const router = useRouter();
-  const { logout, username } = useAuth();
-
-  function handleLogout() {
-    logout();
-    router.push("/login");
-  }
-
   return (
-    <div
-      className="min-h-screen w-full flex flex-col"
-      style={{
-        background: "linear-gradient(160deg, #f6faf4 0%, #edf5eb 100%)",
-      }}
-    >
-      {/* Header */}
-      <header
-        className="w-full flex items-center justify-between px-4 md:px-8 relative overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(135deg, #003d04 0%, #1b6112 60%, #2d7a1f 100%)",
-          minHeight: "64px",
-          boxShadow: "0 4px 24px rgba(0,61,4,0.25)",
-        }}
-      >
-        {/* Círculos decorativos */}
-        <div className="absolute -left-10 -top-10 w-40 h-40 rounded-full opacity-10 bg-[#5bc48b] pointer-events-none" />
-        <div className="absolute right-40 -bottom-12 w-36 h-36 rounded-full opacity-10 bg-[#5bc48b] pointer-events-none" />
-
-        {/* Logo */}
-        <div className="flex items-center gap-2.5 relative z-10">
-          <div
-            className="flex items-center justify-center rounded-xl p-2"
-            style={{ background: "rgba(255,255,255,0.15)" }}
-          >
-            <Leaf size={20} className="text-white" />
+    <div className="flex-1 px-6 py-6 flex flex-col gap-8 max-w-7xl mx-auto w-full">
+      {/* Cadastrar Section */}
+      <section>
+        {/* Header */}
+        <div className="flex items-center gap-8 mb-6 relative pb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-[#1b6112] to-[#3d9428] flex items-center justify-center">
+              <Store size={18} className="text-white" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-[#1a3d1f]">Cadastrar</h2>
+              <p className="text-xs text-[#8aaa8d]">
+                Adicione novos registros ao sistema
+              </p>
+            </div>
           </div>
-          <span
-            className="text-white leading-none"
-            style={{
-              fontWeight: 700,
-              fontSize: "1.1rem",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            EcoFeira
-          </span>
+          <div className="absolute bottom-0 left-40 right-0 h-px bg-gradient-to-r from-[#c8deca] to-transparent" />
         </div>
 
-        {/* Direita */}
-        <div className="flex items-center gap-2 md:gap-3 relative z-10">
-          {username && (
-            <span className="hidden sm:block text-white/70 text-xs">
-              {username}
-            </span>
-          )}
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-xl transition-all duration-200 text-white/85 hover:text-white"
-            style={{
-              background: "rgba(255,255,255,0.1)",
-              border: "1px solid rgba(255,255,255,0.18)",
-              fontWeight: 600,
-              fontSize: "0.875rem",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background =
-                "rgba(255,255,255,0.2)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background =
-                "rgba(255,255,255,0.1)";
-            }}
-          >
-            <LogOut size={15} />
-            <span>Sair</span>
-          </button>
+        {/* Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          {registerCards.map((card, i) => (
+            <ActionCard key={card.sublabel} card={card} index={i} />
+          ))}
         </div>
-      </header>
+      </section>
 
-      {/* Conteúdo principal */}
-      <main className="flex-1 px-4 md:px-6 py-6 flex flex-col gap-8 max-w-6xl mx-auto w-full">
-        {/* Cadastrar */}
-        <section>
-          <SectionHeader
-            icon={UserPlus}
-            title="Cadastrar"
-            subtitle="Adicione novos registros ao sistema"
-            gradient="linear-gradient(135deg, #003d04, #1b6112)"
-          />
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
-            {registerCards.map((card, i) => (
-              <ActionCard key={card.sublabel} card={card} index={i} />
-            ))}
+      {/* Gerenciar Section */}
+      <section>
+        {/* Header */}
+        <div className="flex items-center gap-8 mb-6 relative pb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-[#1b6112] to-[#3d9428] flex items-center justify-center">
+              <LayoutGrid size={18} className="text-white" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-[#1a3d1f]">Gerenciar</h2>
+              <p className="text-xs text-[#8aaa8d]">
+                Edite e administre os dados existentes
+              </p>
+            </div>
           </div>
-        </section>
-
-        {/* Gerenciar */}
-        <section>
-          <SectionHeader
-            icon={LayoutGrid}
-            title="Gerenciar"
-            subtitle="Edite e administre os dados existentes"
-            gradient="linear-gradient(135deg, #1b6112, #3d9428)"
-          />
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
-            {manageCards.map((card, i) => (
-              <ActionCard
-                key={card.sublabel + "-manage"}
-                card={card}
-                index={i}
-              />
-            ))}
-          </div>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="px-4 md:px-8 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Leaf size={13} className="text-[#5bc48b]" />
-          <p className="text-[#9db89f] text-xs">
-            © 2026 EcoFeira · Associação Agroecológica
-          </p>
+          <div className="absolute bottom-0 left-40 right-0 h-px bg-gradient-to-r from-[#c8deca] to-transparent" />
         </div>
-        <p className="text-[#b8ceba] text-[0.7rem] hidden sm:block">
-          Todos os direitos reservados
-        </p>
-      </footer>
+
+        {/* Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          {manageCards.map((card, i) => (
+            <ActionCard key={card.sublabel + "-manage"} card={card} index={i} />
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
