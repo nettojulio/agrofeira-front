@@ -2,18 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/contexts/AuthContext";
 import {
   ArrowLeft,
-  LogOut,
-  Leaf,
   Users,
   Package,
   Store,
   ChevronRight,
-  ArrowRight,
   Loader2,
-  BarChart2,
 } from "lucide-react";
 
 interface Item {
@@ -50,7 +45,6 @@ interface FeiraSummary {
 
 export default function FeirDetalhamentoVisaoGeral() {
   const router = useRouter();
-  const { logout } = useAuth();
   const [loading, setLoading] = useState(true);
   const [feiraSummary, setFeiraSummary] = useState<FeiraSummary | null>(null);
 
@@ -120,15 +114,6 @@ export default function FeirDetalhamentoVisaoGeral() {
     }, 500);
   }, []);
 
-  const handleLogout = () => {
-    logout();
-    router.push("/login");
-  };
-
-  const handleBack = () => {
-    router.back();
-  };
-
   const handleDetailClick = (
     type: "item" | "comerciante" | "cliente",
     id: string,
@@ -174,65 +159,6 @@ export default function FeirDetalhamentoVisaoGeral() {
         background: "linear-gradient(160deg, #f6faf4 0%, #edf5eb 100%)",
       }}
     >
-      {/* Header */}
-      <header
-        className="w-full flex items-center justify-between px-4 md:px-8 relative overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(135deg, #003d04 0%, #1b6112 60%, #2d7a1f 100%)",
-          minHeight: "64px",
-          boxShadow: "0 4px 24px rgba(0,61,4,0.25)",
-        }}
-      >
-        <div className="absolute -left-10 -top-10 w-40 h-40 rounded-full opacity-10 bg-[#5bc48b] pointer-events-none" />
-        <div className="absolute right-40 -bottom-12 w-36 h-36 rounded-full opacity-10 bg-[#5bc48b] pointer-events-none" />
-
-        <div className="flex items-center gap-2.5 relative z-10">
-          <div
-            className="flex items-center justify-center rounded-xl p-2"
-            style={{ background: "rgba(255,255,255,0.15)" }}
-          >
-            <Leaf size={20} className="text-white" />
-          </div>
-          <span className="text-white font-bold text-[1.1rem] tracking-tight">
-            EcoFeira
-          </span>
-        </div>
-
-        <div
-          className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full relative z-10"
-          style={{
-            background: "rgba(255,255,255,0.12)",
-            border: "1px solid rgba(255,255,255,0.2)",
-          }}
-        >
-          <BarChart2 size={14} className="text-white/80" />
-          <span className="text-white/80 text-sm">Visão Geral</span>
-        </div>
-
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-xl transition-all duration-200 text-white/85 hover:text-white relative z-10"
-          style={{
-            background: "rgba(255,255,255,0.1)",
-            border: "1px solid rgba(255,255,255,0.18)",
-            fontWeight: 600,
-            fontSize: "0.875rem",
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background =
-              "rgba(255,255,255,0.2)";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background =
-              "rgba(255,255,255,0.1)";
-          }}
-        >
-          <LogOut size={15} />
-          <span>Sair</span>
-        </button>
-      </header>
-
       {/* Corpo */}
       <main className="flex-1 px-4 md:px-6 py-8 max-w-6xl w-full mx-auto flex flex-col gap-8">
         {/* Título e informações da feira */}

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/dashboard/Header";
-import Footer from "@/components/dashboard/Footer";
 import { cadastrarClienteService } from "@/services/cadastrar-clientes.service";
 import { ArrowLeft, Users, Loader2 } from "lucide-react";
 
@@ -49,7 +48,10 @@ export default function CadastrarClientePage() {
       await cadastrarClienteService(formData);
       router.push("/dashboard");
     } catch (error) {
-      setErro("Erro ao cadastrar cliente. Tente novamente.");
+      const message =
+        error instanceof Error ? error.message : "Erro ao cadastrar cliente";
+      setErro(message);
+      console.error("Erro completo:", error);
     } finally {
       setSubmitting(false);
     }

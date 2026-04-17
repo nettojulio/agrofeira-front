@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/dashboard/Header";
-import Footer from "@/components/dashboard/Footer";
 import { cadastrarComercianteService } from "@/services/cadastrar-comerciantes.service";
 import { ArrowLeft, Store, Loader2 } from "lucide-react";
 
@@ -40,7 +39,12 @@ export default function CadastrarComerciantePage() {
       await cadastrarComercianteService(formData);
       router.push("/dashboard");
     } catch (error) {
-      setErro("Erro ao cadastrar comerciante. Tente novamente.");
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Erro ao cadastrar comerciante";
+      setErro(message);
+      console.error("Erro completo:", error);
     } finally {
       setSubmitting(false);
     }

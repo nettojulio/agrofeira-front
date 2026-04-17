@@ -1,41 +1,5 @@
 import { LeafIcon } from "lucide-react";
 
-const CertificateIcon = () => (
-  <div
-    style={{
-      width: "13px",
-      height: "13px",
-      position: "relative",
-      overflow: "hidden",
-    }}
-  >
-    {/* Ícone superior */}
-    <div
-      style={{
-        width: "9.22px",
-        height: "9.75px",
-        left: "2.16px",
-        top: "1.08px",
-        position: "absolute",
-        outline: "1.08px #5BC48B solid",
-        outlineOffset: "-0.54px",
-      }}
-    />
-    {/* Ícone inferior */}
-    <div
-      style={{
-        width: "5.96px",
-        height: "4.88px",
-        left: "1.08px",
-        top: "6.50px",
-        position: "absolute",
-        outline: "1.08px #5BC48B solid",
-        outlineOffset: "-0.54px",
-      }}
-    />
-  </div>
-);
-
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   return (
@@ -59,10 +23,10 @@ export default function Footer() {
           gap: "8px",
         }}
       >
-        <LeafIcon />
+        <LeafIcon size={16} color="#8b968c" />
         <div
           style={{
-            color: "#9DB89F",
+            color: "#8b968c",
             fontSize: "12px",
             fontWeight: 400,
             lineHeight: "18px",
@@ -75,7 +39,7 @@ export default function Footer() {
       {/* Direita: Direitos Reservados */}
       <div
         style={{
-          color: "#B8CEBA",
+          color: "#8b968c",
           fontSize: "11.20px",
 
           fontWeight: 400,

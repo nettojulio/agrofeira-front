@@ -9,7 +9,9 @@ export default function DashboardLayout({
   return (
     <div
       className="flex min-h-screen flex-col"
-      style={{ backgroundColor: "#FFF9F5" }}
+      style={{
+        background: "linear-gradient(160deg, #f6faf4 0%, #edf5eb 100%)",
+      }}
     >
       <Header />
       <main className="flex-grow pt-20">{children}</main>

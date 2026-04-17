@@ -4,7 +4,6 @@ import { useState, useEffect, type ElementType } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/dashboard/Header";
-import Footer from "@/components/dashboard/Footer";
 import {
   listarComerciantes,
   listarItens,
