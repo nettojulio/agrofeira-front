@@ -6,9 +6,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { listarFeiras, type FeiraDTO } from "@/services/feiras.service";
 import {
   ArrowLeft,
-  LogOut,
-  Leaf,
-  LayoutGrid,
   Package,
   ShoppingCart,
   FileText,
@@ -396,7 +393,7 @@ function OptionCard({
 /* ── Página principal ────────────────────────────────────── */
 export default function GerenciarFeiraPage() {
   const router = useRouter();
-  const { token, logout } = useAuth();
+  const { token } = useAuth();
 
   const [feiras, setFeiras] = useState<FeiraDTO[]>([]);
   const [selected, setSelected] = useState<FeiraDTO | null>(null);
@@ -425,11 +422,6 @@ export default function GerenciarFeiraPage() {
     fetchFeiras();
   }, [token]);
 
-  function handleLogout() {
-    logout();
-    router.push("/login");
-  }
-
   const feiraSelected = selected !== null;
 
   return (
@@ -439,70 +431,6 @@ export default function GerenciarFeiraPage() {
         background: "linear-gradient(160deg, #f6faf4 0%, #edf5eb 100%)",
       }}
     >
-      {/* Header */}
-      <header
-        className="w-full flex items-center justify-between px-4 md:px-8 relative overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(135deg, #003d04 0%, #1b6112 60%, #2d7a1f 100%)",
-          minHeight: "64px",
-          boxShadow: "0 4px 24px rgba(0,61,4,0.25)",
-        }}
-      >
-        <div className="absolute -left-10 -top-10 w-40 h-40 rounded-full opacity-10 bg-[#5bc48b] pointer-events-none" />
-        <div className="absolute right-40 -bottom-12 w-36 h-36 rounded-full opacity-10 bg-[#5bc48b] pointer-events-none" />
-
-        {/* Logo */}
-        <div className="flex items-center gap-2.5 relative z-10">
-          <div
-            className="flex items-center justify-center rounded-xl p-2"
-            style={{ background: "rgba(255,255,255,0.15)" }}
-          >
-            <Leaf size={20} className="text-white" />
-          </div>
-          <span className="text-white font-bold text-[1.1rem] tracking-tight">
-            EcoFeira
-          </span>
-        </div>
-
-        {/* Centro — só desktop */}
-        <div
-          className="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full relative z-10"
-          style={{
-            background: "rgba(255,255,255,0.12)",
-            border: "1px solid rgba(255,255,255,0.2)",
-          }}
-        >
-          <LayoutGrid size={13} className="text-[#a8e6c0]" />
-          <span className="text-white/80 text-sm">Gerenciar Feira</span>
-        </div>
-
-        {/* Sair */}
-        <div className="flex items-center gap-2 relative z-10">
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-xl transition-all duration-200 text-white/85 hover:text-white"
-            style={{
-              background: "rgba(255,255,255,0.1)",
-              border: "1px solid rgba(255,255,255,0.18)",
-              fontWeight: 600,
-              fontSize: "0.875rem",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background =
-                "rgba(255,255,255,0.2)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background =
-                "rgba(255,255,255,0.1)";
-            }}
-          >
-            <LogOut size={15} />
-            <span>Sair</span>
-          </button>
-        </div>
-      </header>
-
       {/* Corpo */}
       <main className="flex-1 px-4 md:px-6 py-6 max-w-4xl w-full mx-auto flex flex-col gap-6">
         {/* Voltar + título */}
@@ -635,19 +563,6 @@ export default function GerenciarFeiraPage() {
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="px-4 md:px-8 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Leaf size={13} className="text-[#5bc48b]" />
-          <p className="text-[#9db89f] text-xs">
-            © 2026 EcoFeira · Associação Agroecológica
-          </p>
-        </div>
-        <p className="text-[#b8ceba] text-[0.7rem] hidden sm:block">
-          Todos os direitos reservados
-        </p>
-      </footer>
     </div>
   );
 }
